@@ -13,7 +13,7 @@
 elgg.provide('elgg.pagesdrafts');
 
 // These fields will trigger draft saves, and will be loaded with draft contents if available
-elgg.pagesdrafts.draftFields = ['title', 'description', 'tags', 'access_id', 'write_access_id', 'parent_guid'];
+elgg.pagesdrafts.draftFields = ['title', 'description', 'tags', 'access_id', 'write_access_id', 'parent_guid', 'page_guid'];
 
 /**	
  * Helper to check for local storage support
@@ -103,11 +103,12 @@ elgg.pagesdrafts.loadDraft = function() {
 
 	// If we've got a draft, load it in
 	var draft = localStorage.getItem('elgg.pagesdrafts.draft');
-	if (draft) {
-		
+
+	draft = JSON.parse(draft);
+
+	// Check for draft, and confirm the draft exists for the current page entity (editing)
+	if (draft && draft.page_guid === $('form.elgg-form-pages-edit :input[name="page_guid"]').val()) {
 		$("<span class='message warning'>" + elgg.echo('pagesdrafts:editingdraft') + "</span>").insertBefore('.elgg-form-pages-edit');
-		
-		draft = JSON.parse(draft);
 		$.each(elgg.pagesdrafts.draftFields, function(idx, item) {
 			$('form.elgg-form-pages-edit :input[name="' + item + '"]').val(draft[item]);
 		});
