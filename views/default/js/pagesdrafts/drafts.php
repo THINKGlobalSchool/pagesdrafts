@@ -52,17 +52,16 @@ elgg.pagesdrafts.init = function() {
 					$(this).change(elgg.pagesdrafts.saveDraft);
 					break;
 				case 'TEXTAREA':
+					// Regular plain text input
 					$(this).keyup(elgg.pagesdrafts.saveDraft);
-					// Add onkeyup event for tinymce, save content, and trigger the textarea keyup
-					if (typeof(tinyMCE) != 'undefined') {
-						var $_textarea = $(this);
-						tinyMCE.onAddEditor.add(function(manager, editor) {
-							editor.onKeyUp.add(function(editor, event) {
-								editor.save();
-								$_textarea.trigger('keyup');
-							});
-						});
-					}
+
+					// CKEditor inputs
+					require(['elgg/ckeditor', 'jquery', 'jquery.ckeditor'], function(elggCKEditor, $) {
+						for (var i in CKEDITOR.instances) {
+					        CKEDITOR.instances[i].on('change', elgg.pagesdrafts.saveDraft);
+						}
+					});
+
 					break;
 			}
 		}

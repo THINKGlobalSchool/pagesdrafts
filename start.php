@@ -17,7 +17,6 @@ elgg_register_event_handler('init', 'system', 'pages_drafts_init');
 function pages_drafts_init() {
 	// register the pages JS
 	$pages_js = elgg_get_simplecache_url('js', 'pagesdrafts/drafts');
-	elgg_register_simplecache_view('js/pagesdrafts/drafts');
 	elgg_register_js('elgg.pagesdrafts', $pages_js);
 
 	// Extend pages page handler
